@@ -5,17 +5,16 @@ module GlobalBattleAgency
   API_URL = "https://global-battle-agency.kirbywithaz.workers.dev"
 
   def self.get_master_key
-    # Correct for v21.1 - combines Name and the 32-bit ID
     return "#{$player.name}_#{$player.id}"
   end
 
-  # DEPOSIT: Sends Pokemon to Cloud and removes from party
+  # Sends Pokémon to Cloud and removes from party.
   def self.upload_pokemon(slot = 0)
     pkmn = $player.party[slot]
     return pbMessage(_INTL("No Pokemon found in slot {1}!", slot + 1)) if !pkmn
     return pbMessage(_INTL("You can't deposit your last Pokemon!")) if $player.party.length <= 1
 
-    # Marshal DNA packing: converts the whole Pokemon object to a text string
+    # Marshal "DNA" converts the whole Pokémon into a text string.
     pokemon_dna = [Marshal.dump(pkmn)].pack("m0")
 
     payload = {
@@ -28,7 +27,7 @@ module GlobalBattleAgency
     begin
       response = HTTPLite.post("#{API_URL}/save", payload)
       if response[:body] && response[:body].include?("OK")
-        # ONLY delete from party if the cloud successfully saved it
+        # ONLY delete from party if the cloud successfully saved it.
         $player.party.delete_at(slot)
         pbMessage(_INTL("Success! {1} has been moved to the cloud.", pkmn.name))
       else
@@ -40,9 +39,9 @@ module GlobalBattleAgency
     end
   end
 
-  # WITHDRAW: Pulls Pokemon from Cloud and deletes the cloud copy
+  # Pulls Pokemon from Cloud and deletes the cloud copy.
   def self.download_pokemon
-    # Pre-check: Don't download if party is full
+    # Don't download if party is full.
     if $player.party_full?
       return pbMessage(_INTL("Your party is full! Make some room first."))
     end
@@ -51,19 +50,19 @@ module GlobalBattleAgency
     id = self.get_master_key
     
     begin
-      # 1. Ask for the data
+      # Ask for the data.
       response = HTTPLite.get("#{API_URL}/get?id=#{id}")
       data = response[:body]
 
       if data && data != "NOT_FOUND" && !data.include?("Error")
-        # 2. Re-create the Pokemon from DNA
+        # Re-create the Pokémon from the "DNA".
         decoded_data = data.unpack("m0")[0]
         pkmn = Marshal.load(decoded_data)
         
-        # 3. SILENT ADD: Just pushes the existing object back into the party array
+        # Just pushes the existing object back into the party quietly.
         $player.party.push(pkmn)
         
-        # 4. Anti-Cloning: Tell the server to delete the cloud copy
+        # Tell the server to delete the cloud copy.
         HTTPLite.get("#{API_URL}/delete?id=#{id}")
         
         pbMessage(_INTL("Welcome back, {1}!", pkmn.name))
