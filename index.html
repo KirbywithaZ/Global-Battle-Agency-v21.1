@@ -126,7 +126,21 @@ border:1px solid rgba(255,255,255,.1);
 padding:12px 20px;
 border-radius:12px;
 font-size:14px;
+z-index:1000;
 display:none;
+}
+
+/* Fix for the horizontal scroll issue */
+.gift-content-wrapper {
+min-width: 0;
+flex: 1;
+}
+
+.code-block-fixed {
+display: block;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
 }
 </style>
 </head>
@@ -482,18 +496,19 @@ const item=document.createElement('div')
 
 item.className='p-6 flex justify-between items-start hover:bg-white/5 transition group border-b border-white/5'
 
+/* Fixed this template literal to include the wrapping classes */
 item.innerHTML=`
-<div class="flex-1 pr-4">
+<div class="gift-content-wrapper pr-4">
 
 <div class="font-mono font-bold text-pink-400">${gift.id}</div>
 
 <div class="text-sm font-semibold text-slate-200">${gift.description||'No description'}</div>
 
-<div class="text-[10px] text-slate-500 font-mono mt-2 bg-black/30 p-2 rounded border border-white/5 truncate">${gift.data}</div>
+<div class="text-[10px] text-slate-500 font-mono mt-2 bg-black/30 p-2 rounded border border-white/5 code-block-fixed">${gift.data}</div>
 
 </div>
 
-<button onclick="deleteGift('${gift.id}')" class="text-slate-600 hover:text-red-400 p-2">
+<button onclick="deleteGift('${gift.id}')" class="flex-shrink-0 text-slate-600 hover:text-red-400 p-2 ml-2">
 <i data-lucide="trash-2" class="w-4 h-4"></i>
 </button>
 `
