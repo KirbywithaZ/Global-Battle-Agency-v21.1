@@ -55,16 +55,20 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-1">
                 <div class="glass p-6 rounded-2xl">
-                    <h3 class="text-lg font-bold mb-4">Create Mystery Gift</h3>
-                    <input type="text" id="giftCode" placeholder="GIFT_CODE" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-3 mb-3 text-sm uppercase outline-none">
-                    <textarea id="giftData" rows="4" placeholder="Paste Marshal String..." class="w-full bg-slate-900 border border-slate-800 rounded-lg p-3 mb-3 text-xs outline-none"></textarea>
-                    <button onclick="uploadGift()" class="w-full bg-blue-600 py-2 rounded-lg font-bold text-sm">Deploy</button>
+                    <h3 class="text-lg font-bold mb-4 text-blue-300">Create Mystery Gift</h3>
+                    <div class="mb-4 text-xs text-slate-500">
+                        Codes starting with <span class="text-green-400 font-mono">GIFT_</span> are permanent. Others are one-time use.
+                    </div>
+                    <input type="text" id="giftCode" placeholder="GIFT_EXAMPLE" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-3 mb-3 text-sm uppercase outline-none focus:border-blue-500">
+                    <textarea id="giftData" rows="4" placeholder="Paste Marshal String..." class="w-full bg-slate-900 border border-slate-800 rounded-lg p-3 mb-3 text-xs outline-none focus:border-blue-500"></textarea>
+                    <button onclick="uploadGift()" class="w-full bg-blue-600 py-2 rounded-lg font-bold text-sm hover:bg-blue-500 transition">Deploy to Cloud</button>
                 </div>
             </div>
             <div class="lg:col-span-2">
                 <div class="glass rounded-2xl overflow-hidden">
-                    <div class="p-6 bg-white/5 border-b border-white/5">
+                    <div class="p-6 bg-white/5 border-b border-white/5 flex justify-between items-center">
                         <h3 class="font-bold">Active Live-Gifts</h3>
+                        <button onclick="loadGifts()" class="text-xs text-slate-400 hover:text-white">Refresh List</button>
                     </div>
                     <div id="giftList" class="divide-y divide-white/5"></div>
                 </div>
@@ -73,7 +77,7 @@
     </section>
 
     <script>
-        // Use unique variable names to avoid "Already declared" errors
+        // CONFIG - REPLACE THESE
         const S_URL = 'YOUR_SUPABASE_URL';
         const S_KEY = 'YOUR_SUPABASE_ANON_KEY';
         const gbaClient = supabase.createClient(S_URL, S_KEY);
@@ -81,7 +85,6 @@
         let currentUser = localStorage.getItem('gba_user');
 
         function showPage(pageId) {
-            console.log("Navigating to:", pageId);
             const pages = ['landing', 'login', 'register', 'dashboard'];
             pages.forEach(p => {
                 const el = document.getElementById(`page-${p}`);
@@ -129,7 +132,8 @@
             const data = document.getElementById('giftData').value.trim();
             if (!id || !data) return alert("Fill all fields");
 
-            const { error } = await gbaClient.from('gba_storage').upsert({ 
+            // TABLE UPDATED: Now uses gba_mystery_gifts
+            const { error } = await gbaClient.from('gba_mystery_gifts').upsert({ 
                 id: id, 
                 data: data, 
                 dev_owner: currentUser 
@@ -144,37 +148,49 @@
         }
 
         async function loadGifts() {
-            const { data } = await gbaClient.from('gba_storage').select('*').eq('dev_owner', currentUser);
+            // TABLE UPDATED: Now uses gba_mystery_gifts
+            const { data, error } = await gbaClient.from('gba_mystery_gifts').select('*').eq('dev_owner', currentUser);
             const list = document.getElementById('giftList');
             list.innerHTML = '';
             
+            if (error) {
+                list.innerHTML = `<p class="p-10 text-center text-red-400">Database Error: ${error.message}</p>`;
+                return;
+            }
+
             if (!data || data.length === 0) {
-                list.innerHTML = '<p class="p-10 text-center text-slate-500">No active gifts.</p>';
+                list.innerHTML = '<p class="p-10 text-center text-slate-500">No active gifts found.</p>';
                 return;
             }
 
             data.forEach(gift => {
                 const item = document.createElement('div');
-                item.className = "p-4 flex justify-between items-center hover:bg-white/5";
+                item.className = "p-4 flex justify-between items-center hover:bg-white/5 group transition";
                 item.innerHTML = `
-                    <div>
-                        <div class="font-bold text-blue-400">${gift.id}</div>
-                        <div class="text-xs text-slate-500 truncate w-48">${gift.data}</div>
+                    <div class="flex-1 min-w-0 pr-4">
+                        <div class="font-bold text-blue-400 flex items-center gap-2">
+                            ${gift.id}
+                            ${gift.id.startsWith('GIFT_') ? '<span class="text-[10px] bg-green-900/40 text-green-400 px-1 rounded">PERMANENT</span>' : ''}
+                        </div>
+                        <div class="text-xs text-slate-500 truncate font-mono">${gift.data}</div>
                     </div>
-                    <button onclick="deleteGift('${gift.id}')" class="text-red-500 text-xs font-bold hover:underline">Revoke</button>
+                    <div class="flex gap-4">
+                        <button onclick="navigator.clipboard.writeText('${gift.id}'); alert('Code Copied!')" class="text-slate-500 hover:text-white text-xs font-bold">Copy</button>
+                        <button onclick="deleteGift('${gift.id}')" class="text-red-500 text-xs font-bold hover:text-red-300">Revoke</button>
+                    </div>
                 `;
                 list.appendChild(item);
             });
         }
 
         async function deleteGift(id) {
-            if (confirm(`Revoke gift ${id}?`)) {
-                await gbaClient.from('gba_storage').delete().eq('id', id);
+            if (confirm(`Are you sure you want to revoke gift ${id}? Players will no longer be able to claim it.`)) {
+                // TABLE UPDATED: Now uses gba_mystery_gifts
+                await gbaClient.from('gba_mystery_gifts').delete().eq('id', id);
                 loadGifts();
             }
         }
 
-        // Run on load
         window.onload = () => {
             if (currentUser) loginSuccess(currentUser);
             else showPage('landing');
