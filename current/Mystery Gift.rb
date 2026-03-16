@@ -1,22 +1,13 @@
 #===============================================================================
-# Global Battle Agency - Mystery Gift System (Essentials v20/v21 Compatible)
+# Global Battle Agency (GBA) / Mystery Gifts
 #===============================================================================
 
-#===============================================================================
-# CONFIG
-#===============================================================================
-API_URL = "https://global-battle-agency.kirbywithaz.workers.dev"
-
-#===============================================================================
-# GLOBAL EVENT CALL
-# Call this in events: gba_mystery_gift
-#===============================================================================
 def gba_mystery_gift
   GlobalBattleAgency.open_redemption_menu
 end
 
 #===============================================================================
-# CONSOLE DATA GENERATOR
+# Mystery Gift Generator
 #===============================================================================
 def pbGenerateGiftData(type, value, quantity = 1)
   gift = {
@@ -34,30 +25,30 @@ def pbGenerateGiftData(type, value, quantity = 1)
   pbMessage(_INTL("Gift data generated! Check console."))
 end
 
-#===============================================================================
-# MAIN MODULE
-#===============================================================================
 module GlobalBattleAgency
+  
+  #-----------------------------
+  # Configuration
+  #-----------------------------
+  API_URL = "https://global-battle-agency.kirbywithaz.workers.dev"
 
-  #---------------------------------------------------------------------------
+  #-----------------------------
+  # Internal Helpers
+  #-----------------------------
   def self.trainer
     defined?($player) ? $player : $Trainer
   end
 
-  #---------------------------------------------------------------------------
   def self.bag
     defined?($bag) ? $bag : $PokemonBag
   end
 
-#---------------------------------------------------------------------------
+  #-----------------------------
+  # Redemption Menu
+  #-----------------------------
   def self.open_redemption_menu
-    # Player only types the actual word (e.g., "WINDSANDWAVES")
-    # 13 characters is plenty if we handle the "GIFT_" part for them!
     input = pbEnterText(_INTL("Mystery Gift Code?"), 0, 13)
-
     if input && !input.strip.empty?
-      # We add "GIFT_" internally so the Worker knows NOT to delete it
-      # and so it matches your Supabase ID exactly.
       full_code = "GIFT_" + input.strip.upcase
       claim_mystery_gift(full_code)
     else
@@ -65,7 +56,9 @@ module GlobalBattleAgency
     end
   end
 
-  #---------------------------------------------------------------------------
+  #-----------------------------
+  # Claim Logic
+  #-----------------------------
   def self.claim_mystery_gift(code)
     return false if code.nil? || code.strip.empty?
 
@@ -81,28 +74,26 @@ module GlobalBattleAgency
         return fail_message("Gift code not found or already claimed.")
       end
 
-      # Safe Base64 decode
+      # Decode and Unmarshal
       decoded = data.unpack("m0")[0] rescue nil
       return fail_message("Invalid gift data.") if decoded.nil?
 
       gift_data = Marshal.load(decoded) rescue nil
       return fail_message("Corrupted gift package.") if gift_data.nil?
 
+      # Process Reward Type
       case gift_data[:type]
-
       when :pokemon
         if trainer.party_full?
           return fail_message("Your party is full!")
         end
-
         trainer.party << gift_data[:value]
         pbMessage(_INTL("You received a Pokémon!"))
 
       when :item
         item_id = gift_data[:value]
         qty     = gift_data[:quantity] || 1
-
-        item = GameData::Item.try_get(item_id)
+        item    = GameData::Item.try_get(item_id)
         return fail_message("Invalid item ID.") if item.nil?
 
         bag.add(item_id, qty)
@@ -124,7 +115,6 @@ module GlobalBattleAgency
         pbMessage(_INTL("You received a mysterious gift!"))
       end
 
-      # Delete one-time codes (unless permanent)
       unless target_id.start_with?("GIFT_")
         HTTPLite.get("#{API_URL}/delete?id=#{target_id}")
       end
@@ -139,17 +129,18 @@ module GlobalBattleAgency
     end
   end
 
-  #---------------------------------------------------------------------------
+  #-----------------------------
+  # Error Handling
+  #-----------------------------
   def self.fail_message(msg)
     pbMessage(_INTL(msg))
     return false
   end
-
 end
 
-#===============================================================================
+#-----------------------------
 # Interpreter Hook
-#===============================================================================
+#-----------------------------
 class Game_Interpreter
   def gba_mystery_gift
     GlobalBattleAgency.open_redemption_menu
