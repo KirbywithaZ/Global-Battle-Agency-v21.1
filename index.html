@@ -21,47 +21,70 @@ overflow-x:hidden;
 margin: 0;
 }
 
-body::before{
-content:"";
-position:fixed;
-width:600px;
-height:600px;
-background:radial-gradient(circle,#f472b650,transparent 70%);
-top:-200px;
-left:-200px;
-filter:blur(120px);
-z-index:-1;
-animation: drift 25s ease-in-out infinite alternate;
+/* Background Animation */
+@keyframes move {
+    100% {
+        transform: translate3d(0, 0, 1px) rotate(360deg);
+    }
 }
 
-body::after{
-content:"";
-position:fixed;
-width:600px;
-height:600px;
-background:radial-gradient(circle,#ec489950,transparent 70%);
-bottom:-200px;
-right:-200px;
-filter:blur(120px);
-z-index:-1;
-animation: drift 30s ease-in-out infinite alternate-reverse;
+.background {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: #0a0f1e;
+    overflow: hidden;
+    z-index: 0;
 }
 
-@keyframes drift {
-0% { transform: translate(0, 0) scale(1); }
-50% { transform: translate(100px, 50px) scale(1.1); }
-100% { transform: translate(-50px, 100px) scale(0.9); }
+.background span {
+    width: 20vmin;
+    height: 20vmin;
+    border-radius: 20vmin;
+    backface-visibility: hidden;
+    position: absolute;
+    animation: move;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    opacity: 0.6;
+    filter: blur(40px);
 }
+
+/* All spans set to variations of pink */
+.background span:nth-child(0) { color: #f472b6; top: 92%; left: 44%; animation-duration: 7s; animation-delay: -41s; transform-origin: -6vw 3vh; box-shadow: 40vmin 0 5.533499407511281vmin currentColor; }
+.background span:nth-child(1) { color: #ff7070; top: 1%; left: 19%; animation-duration: 52s; animation-delay: -2s; transform-origin: 2vw -23vh; box-shadow: 40vmin 0 5.089884948988104vmin currentColor; }
+.background span:nth-child(2) { color: #ff5c8d; top: 66%; left: 79%; animation-duration: 7s; animation-delay: -11s; transform-origin: -14vw 2vh; box-shadow: -40vmin 0 5.214087192260501vmin currentColor; }
+.background span:nth-child(3) { color: #ff7070; top: 14%; left: 1%; animation-duration: 48s; animation-delay: -9s; transform-origin: -7vw 23vh; box-shadow: -40vmin 0 5.930374654924698vmin currentColor; }
+.background span:nth-child(4) { color: #f472b6; top: 60%; left: 11%; animation-duration: 50s; animation-delay: -22s; transform-origin: -15vw -6vh; box-shadow: -40vmin 0 5.895919386380433vmin currentColor; }
+.background span:nth-child(5) { color: #ff7070; top: 6%; left: 100%; animation-duration: 6s; animation-delay: -30s; transform-origin: -8vw 22vh; box-shadow: -40vmin 0 5.82205395897591vmin currentColor; }
+.background span:nth-child(6) { color: #ff5c8d; top: 17%; left: 22%; animation-duration: 14s; animation-delay: -31s; transform-origin: -3vw -5vh; box-shadow: -40vmin 0 5.047009229777449vmin currentColor; }
+.background span:nth-child(7) { color: #ff7070; top: 72%; left: 23%; animation-duration: 8s; animation-delay: -14s; transform-origin: -1vw 7vh; box-shadow: 40vmin 0 5.712403582129776vmin currentColor; }
+.background span:nth-child(8) { color: #ff7070; top: 69%; left: 81%; animation-duration: 23s; animation-delay: -8s; transform-origin: 2vw -19vh; box-shadow: 40vmin 0 5.530879029774813vmin currentColor; }
+.background span:nth-child(9) { color: #f472b6; top: 38%; left: 92%; animation-duration: 43s; animation-delay: -40s; transform-origin: 16vw 19vh; box-shadow: -40vmin 0 5.123792910222306vmin currentColor; }
+.background span:nth-child(10) { color: #f472b6; top: 7%; left: 60%; animation-duration: 12s; animation-delay: -14s; transform-origin: 23vw -1vh; box-shadow: 40vmin 0 5.499715085689597vmin currentColor; }
+.background span:nth-child(11) { color: #ff7070; top: 1%; left: 80%; animation-duration: 47s; animation-delay: -7s; transform-origin: 6vw -18vh; box-shadow: 40vmin 0 5.264077782305026vmin currentColor; }
+.background span:nth-child(12) { color: #ff5c8d; top: 30%; left: 72%; animation-duration: 7s; animation-delay: -48s; transform-origin: 5vw 9vh; box-shadow: 40vmin 0 5.419843714315717vmin currentColor; }
+.background span:nth-child(13) { color: #ff5c8d; top: 6%; left: 64%; animation-duration: 15s; animation-delay: -48s; transform-origin: 16vw -11vh; box-shadow: 40vmin 0 5.521823175884256vmin currentColor; }
+.background span:nth-child(14) { color: #ff7070; top: 76%; left: 26%; animation-duration: 8s; animation-delay: -49s; transform-origin: 6vw 10vh; box-shadow: -40vmin 0 5.545044034570935vmin currentColor; }
+.background span:nth-child(15) { color: #f472b6; top: 8%; left: 8%; animation-duration: 37s; animation-delay: -19s; transform-origin: 11vw -22vh; box-shadow: -40vmin 0 5.977934034872068vmin currentColor; }
+.background span:nth-child(16) { color: #ff7070; top: 82%; left: 91%; animation-duration: 16s; animation-delay: -19s; transform-origin: 12vw -15vh; box-shadow: -40vmin 0 5.230215988289069vmin currentColor; }
+.background span:nth-child(17) { color: #ff7070; top: 1%; left: 71%; animation-duration: 23s; animation-delay: -48s; transform-origin: 18vw 24vh; box-shadow: 40vmin 0 5.280226637928458vmin currentColor; }
+.background span:nth-child(18) { color: #f472b6; top: 62%; left: 56%; animation-duration: 11s; animation-delay: -42s; transform-origin: -12vw -10vh; box-shadow: -40vmin 0 5.3129468385338985vmin currentColor; }
+.background span:nth-child(19) { color: #f472b6; top: 91%; left: 100%; animation-duration: 14s; animation-delay: -35s; transform-origin: 16vw 12vh; box-shadow: -40vmin 0 5.75514146244981vmin currentColor; }
 
 .sidebar{
 background:#111827;
 border-right:1px solid rgba(255,255,255,0.05);
+position: relative;
+z-index: 50;
 }
 
 .glass{
-background:linear-gradient(145deg,rgba(30,41,59,.55),rgba(15,23,42,.6));
+background:linear-gradient(145deg,rgba(30,41,59,.65),rgba(15,23,42,.75));
 backdrop-filter:blur(16px);
-border:1px solid rgba(255,255,255,0.08);
+border:1px solid rgba(255,255,255,0.1);
 box-shadow:
 0 10px 30px rgba(0,0,0,.4),
 inset 0 1px 0 rgba(255,255,255,.05);
@@ -105,13 +128,23 @@ color:white;
 box-shadow:0 4px 15px rgba(244,114,182,.3);
 }
 
+.nav-item.active-purple {
+background:#a855f7;
+color:white;
+box-shadow:0 4px 15px rgba(168,85,247,.3);
+}
+
+.nav-item.active-blue {
+background:#3b82f6;
+color:white;
+box-shadow:0 4px 15px rgba(59,130,246,.3);
+}
+
 button{
 transition:.2s;
 }
 
-button:active{
-transform:scale(.96);
-}
+button:active{ transform:scale(.96); }
 
 .hidden{display:none!important}
 
@@ -123,8 +156,8 @@ z-index:100;
 display:flex;
 flex-direction:column;
 align-items:center;
-justify-content:center;
-transition: opacity 0.3s ease;
+justify-content: center;
+transition: opacity 0.5s ease;
 }
 
 #toast{
@@ -140,10 +173,7 @@ z-index:1000;
 display:none;
 }
 
-.gift-content-wrapper {
-min-width: 0;
-flex: 1;
-}
+.gift-content-wrapper { min-width: 0; flex: 1; }
 
 .code-block-fixed {
 display: block;
@@ -151,23 +181,31 @@ white-space: nowrap;
 overflow: hidden;
 text-overflow: ellipsis;
 }
+
+main { position: relative; z-index: 10; }
 </style>
 </head>
 
 <body class="flex min-h-screen">
 
+<div class="background">
+   <span></span><span></span><span></span><span></span><span></span>
+   <span></span><span></span><span></span><span></span><span></span>
+   <span></span><span></span><span></span><span></span><span></span>
+   <span></span><span></span><span></span><span></span><span></span>
+</div>
+
 <div id="toast"></div>
 
-<!-- Loading screen is visible by default to prevent flashing landing page -->
 <div id="loading-screen">
 <div class="w-12 h-12 border-4 border-pink-500/20 border-t-pink-500 rounded-full animate-spin mb-4"></div>
-<p class="text-slate-400 animate-pulse">Initializing Crib...</p>
+<p class="text-slate-400 animate-pulse text-sm font-medium tracking-wide">Initializing Crib...</p>
 </div>
 
 <aside id="sidebar" class="hidden w-64 sidebar flex-col p-6 fixed h-full z-50">
 <div class="mb-10 px-2">
 <h1 class="text-xl font-extrabold gradient-text">Cozy Crib</h1>
-<p class="text-[10px] text-slate-500 uppercase tracking-widest">Cloud Manager</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-widest">Essentials Toolkit</p>
 </div>
 
 <nav class="flex-1 space-y-2">
@@ -177,7 +215,7 @@ text-overflow: ellipsis;
 <div onclick="showPage('dashboard')" id="btn-dashboard" class="nav-item">
 <i data-lucide="gift" class="w-5 h-5"></i> Mystery Gifts
 </div>
-<div class="nav-item opacity-50 cursor-not-allowed">
+<div onclick="showPage('data-manager')" id="btn-data-manager" class="nav-item">
 <i data-lucide="database" class="w-5 h-5"></i> Data Manager
 </div>
 </nav>
@@ -185,7 +223,7 @@ text-overflow: ellipsis;
 <div class="pt-6 border-t border-white/10">
 <div class="flex items-center gap-3 mb-4 px-2">
 <div id="userInitial" class="w-8 h-8 rounded-full bg-gradient-to-tr from-pink-400 to-pink-600 flex items-center justify-center text-xs font-bold">?</div>
-<div id="displayUser" class="text-sm font-medium truncate">User</div>
+<div id="displayUser" class="text-sm font-medium truncate text-slate-200">User</div>
 </div>
 <button onclick="logout()" class="w-full text-left text-xs text-red-400 hover:text-red-300 px-2 flex items-center gap-2">
 <i data-lucide="log-out" class="w-3 h-3"></i> Logout
@@ -193,27 +231,27 @@ text-overflow: ellipsis;
 </div>
 </aside>
 
-<main id="main-content" class="flex-1 transition-all duration-300">
+<main id="content-main" class="flex-1 transition-all duration-300">
 <header class="h-16 border-b border-white/5 bg-[#0f172a]/60 backdrop-blur flex items-center justify-between px-8">
 <div class="flex items-center gap-3">
 <i data-lucide="sparkles" class="w-5 h-5 text-pink-400"></i>
 <span class="font-semibold text-sm text-slate-300">Developer Console</span>
 </div>
 <div class="flex items-center gap-4 text-sm">
-<span class="text-slate-400">Connected</span>
+<span class="text-slate-400">Online</span>
 <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
 </div>
 </header>
 
 <div id="page-landing" class="hidden max-w-4xl mx-auto py-32 px-6 text-center page-fade">
 <div class="inline-block px-4 py-1 rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-400 text-xs font-bold mb-6">
-v2.1 LIVE
+v0.1 is live!
 </div>
 <h1 class="text-6xl md:text-8xl font-black mb-8 leading-tight">
 Welcome to <br><span class="gradient-text">the Cozy Crib.</span>
 </h1>
 <p class="text-slate-400 text-xl mb-12 max-w-2xl mx-auto">
-A website where you can use all my tools for Pokémon Essentials.
+A website where you can use tools for Pokémon Essentials that might slightly make your game better.
 </p>
 <div class="flex flex-wrap justify-center gap-6">
 <button onclick="showPage('login')" class="bg-pink-600 px-10 py-4 rounded-2xl font-bold text-lg hover:bg-pink-500 hover:scale-105 transition shadow-lg shadow-pink-600/20">
@@ -256,12 +294,12 @@ Create Account
 
 <div id="page-home" class="hidden p-10 page-fade max-w-6xl mx-auto">
 <h2 class="text-4xl font-extrabold mb-2">Essentials Toolkit</h2>
-<p class="text-slate-400 mb-10 italic">
-All the tools you need to make your game just a teensy bit better. Or maybe worse. I dunno.
+<p class="text-slate-400 mb-10">
+All the tools you need to make your game just a teensy bit better.
 </p>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-<div onclick="showPage('dashboard')" class="glass p-8 rounded-3xl group hover:border-pink-500/50 transition cursor-pointer">
-<div class="w-12 h-12 bg-pink-500/10 rounded-2xl flex items-center justify-center text-pink-400 mb-6 group-hover:scale-110 transition">
+<div onclick="showPage('dashboard')" class="glass p-8 rounded-3xl group hover:border-purple-500/50 transition cursor-pointer">
+<div class="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center text-purple-400 mb-6 group-hover:scale-110 transition">
 <i data-lucide="gift"></i>
 </div>
 <h3 class="text-xl font-bold mb-2">Mystery Gift Console</h3>
@@ -269,20 +307,29 @@ All the tools you need to make your game just a teensy bit better. Or maybe wors
 Deploy new items or Pokémon directly to player games.
 </p>
 </div>
+<div onclick="showPage('data-manager')" class="glass p-8 rounded-3xl group hover:border-blue-500/50 transition cursor-pointer">
+<div class="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-400 mb-6 group-hover:scale-110 transition">
+<i data-lucide="database"></i>
+</div>
+<h3 class="text-xl font-bold mb-2">Data Manager</h3>
+<p class="text-slate-400 text-sm">
+Decode and unpack Base64 Pokémon Marshal data.
+</p>
+</div>
 </div>
 </div>
 
 <div id="page-dashboard" class="hidden p-10 page-fade max-w-6xl mx-auto">
-<h2 class="text-4xl font-extrabold mb-10">Gift Generator</h2>
+<h2 class="text-4xl font-extrabold mb-10">Mystery Gift Generator</h2>
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 <div class="glass p-8 rounded-3xl space-y-5">
 <label class="text-xs text-slate-500 uppercase tracking-widest">Gift Code</label>
-<input id="giftCode" placeholder="SUMMER2026" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-4">
+<input id="giftCode" maxlength="13" placeholder="SUMMER2026" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-4 outline-none focus:ring-1 ring-purple-500">
 <label class="text-xs text-slate-500 uppercase tracking-widest">Description</label>
-<input id="giftDesc" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-4">
+<input id="giftDesc" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-4 outline-none focus:ring-1 ring-purple-500">
 <label class="text-xs text-slate-500 uppercase tracking-widest">Script Data</label>
-<textarea id="giftData" rows="4" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-4"></textarea>
-<button onclick="uploadGift()" class="w-full bg-pink-600 py-4 rounded-2xl font-bold hover:bg-pink-500">
+<textarea id="giftData" rows="4" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-4 outline-none focus:ring-1 ring-purple-500"></textarea>
+<button onclick="uploadGift()" class="w-full bg-purple-600 py-4 rounded-2xl font-bold hover:bg-purple-500 shadow-lg shadow-purple-600/20">
 Deploy to Cloud
 </button>
 </div>
@@ -294,6 +341,57 @@ Deploy to Cloud
 <div id="giftList" class="divide-y divide-white/5 overflow-y-auto max-h-[600px]"></div>
 </div>
 </div>
+</div>
+
+<div id="page-data-manager" class="hidden p-10 page-fade max-w-6xl mx-auto">
+  <h2 class="text-4xl font-extrabold mb-10 text-blue-400">Data Manager</h2>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    
+    <div class="glass p-8 rounded-3xl space-y-5">
+      <div class="flex items-center gap-3 mb-2">
+        <i data-lucide="unlock" class="text-blue-400 w-5 h-5"></i>
+        <h3 class="font-bold text-slate-200">Marshal Decoder</h3>
+      </div>
+      <p class="text-xs text-slate-500 mb-4 uppercase tracking-widest">Base64 Pokémon String</p>
+      <textarea id="decodeInput" rows="8" placeholder="BAhbB286DFBva2Vtb25K..." 
+        class="w-full bg-slate-900/50 border border-slate-800 rounded-xl p-4 outline-none focus:ring-1 ring-blue-500 font-mono text-xs text-blue-100 placeholder:opacity-30"></textarea>
+      <button onclick="decodePokemon()" class="w-full bg-blue-600 py-4 rounded-2xl font-bold hover:bg-blue-500 shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2">
+        <i data-lucide="zap" class="w-5 h-5"></i> Unpack Pokémon
+      </button>
+    </div>
+
+    <div class="glass p-8 rounded-3xl relative min-h-[400px]" id="decodeResult">
+      <div id="resultPlaceholder" class="flex flex-col items-center justify-center h-full py-20 text-slate-600">
+        <i data-lucide="binary" class="w-12 h-12 mb-4 opacity-20"></i>
+        <p class="text-sm">Awaiting Data Input...</p>
+      </div>
+
+      <div id="pokemonDetails" class="hidden space-y-6">
+        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+          <div>
+            <div id="resShiny" class="hidden inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-yellow-500 text-black mb-1">SHINY</div>
+            <h4 id="resSpecies" class="text-3xl font-black uppercase italic tracking-tighter text-white">SPECIES</h4>
+          </div>
+          <div class="text-right">
+            <span id="resLevel" class="text-blue-400 font-mono text-xl font-bold">Lv. 0</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-6 text-sm">
+          <div><span class="text-slate-500 block text-[10px] uppercase font-bold tracking-widest mb-1">Nature</span> <span id="resNature" class="text-slate-200 font-medium italic">---</span></div>
+          <div><span class="text-slate-500 block text-[10px] uppercase font-bold tracking-widest mb-1">Ability</span> <span id="resAbility" class="text-slate-200 font-medium">---</span></div>
+          <div><span class="text-slate-500 block text-[10px] uppercase font-bold tracking-widest mb-1">Trainer</span> <span id="resTrainer" class="text-slate-200">---</span></div>
+          <div><span class="text-slate-500 block text-[10px] uppercase font-bold tracking-widest mb-1">Held Item</span> <span id="resItem" class="text-slate-200 italic">None</span></div>
+        </div>
+
+        <div>
+          <span class="text-slate-500 block text-[10px] uppercase font-bold tracking-widest mb-3">Move Set</span>
+          <div id="resMoves" class="grid grid-cols-2 gap-2"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
 </main>
 
@@ -313,14 +411,35 @@ t.style.display='block'
 setTimeout(()=>t.style.display='none',3000)
 }
 
+function updateNav(pageId) {
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+        item.classList.remove('active-purple');
+        item.classList.remove('active-blue');
+    });
+    
+    const activeBtn = document.getElementById('btn-' + pageId);
+    if(activeBtn) {
+        if (pageId === 'dashboard') {
+            activeBtn.classList.add('active-purple');
+        } else if (pageId === 'data-manager') {
+            activeBtn.classList.add('active-blue');
+        } else {
+            activeBtn.classList.add('active');
+        }
+    }
+}
+
 function showPage(page){
 document.querySelectorAll('[id^="page-"]').forEach(p=>p.classList.add('hidden'))
 document.getElementById('page-'+page).classList.remove('hidden')
 
 const sidebar=document.getElementById('sidebar')
-const main=document.getElementById('main-content')
+const main=document.getElementById('content-main')
 
-if(page==='home'||page==='dashboard'){
+updateNav(page);
+
+if(page==='home'||page==='dashboard'||page==='data-manager'){
 sidebar.classList.remove('hidden')
 sidebar.classList.add('flex')
 main.classList.add('ml-64')
@@ -340,10 +459,9 @@ localStorage.setItem('gba_user',user)
 document.getElementById('displayUser').innerText=user
 document.getElementById('userInitial').innerText=user.charAt(0).toUpperCase()
 
-// Fade out the loader
 const loader = document.getElementById('loading-screen');
 loader.style.opacity = '0';
-setTimeout(() => loader.classList.add('hidden'), 300);
+setTimeout(() => loader.classList.add('hidden'), 500);
 
 showPage('home')
 }
@@ -401,7 +519,7 @@ list.innerHTML='<div class="p-10 text-red-400">Error loading registry</div>'
 return
 }
 if(!data||data.length===0){
-list.innerHTML='<div class="p-10 text-slate-500 italic text-center">🎁 No gifts deployed yet</div>'
+list.innerHTML='<div class="p-10 text-slate-500 text-center font-medium">No gifts deployed yet.</div>'
 return
 }
 
@@ -411,7 +529,7 @@ const item=document.createElement('div')
 item.className='p-6 flex justify-between items-start hover:bg-white/5 transition group border-b border-white/5'
 item.innerHTML=`
 <div class="gift-content-wrapper pr-4">
-<div class="font-mono font-bold text-pink-400">${gift.id}</div>
+<div class="font-mono font-bold text-purple-400">${gift.id}</div>
 <div class="text-sm font-semibold text-slate-200">${gift.description||'No description'}</div>
 <div class="text-[10px] text-slate-500 font-mono mt-2 bg-black/30 p-2 rounded border border-white/5 code-block-fixed">${gift.data}</div>
 </div>
@@ -430,14 +548,83 @@ await gbaClient.from('gba_mystery_gifts').delete().eq('id',id)
 loadGifts()
 }
 
-// Immediate check before window load to prevent flickering
+// --- POKEMON DECODER LOGIC ---
+function decodePokemon() {
+    // 1. Clean the input of any whitespace/newlines
+    const input = document.getElementById('decodeInput').value.replace(/\s/g, '');
+    if (!input) { toast("Paste a code first!"); return; }
+
+    try {
+        // 2. Decode Base64 to a byte-friendly string
+        const decoded = atob(input);
+        
+        // 3. Robust "Fuzzy" Search helper
+        // This looks for a keyword and grabs the alphanumeric text following it
+        const extract = (key) => {
+            const index = decoded.indexOf(key);
+            if (index === -1) return null;
+            // Grab a chunk of text after the key and filter for readable chars
+            const chunk = decoded.substring(index + key.length, index + key.length + 20);
+            const match = chunk.match(/[A-Z0-9_]+/);
+            return match ? match[0] : null;
+        };
+
+        // 4. Extracting the core data
+        const species = extract('species');
+        const nature = extract('nature');
+        const ability = extract('ability');
+        const item = extract('item');
+        
+        // Level handling (Ruby binary integers can be tricky)
+        const levelMatch = decoded.match(/leveli([\s\S])/);
+        const level = levelMatch ? levelMatch[1].charCodeAt(0) : "??";
+        
+        // Shiny check
+        const shiny = decoded.includes('shinyT');
+
+        if (!species) throw new Error("Could not find species marker");
+
+        // 5. Update UI
+        document.getElementById('resultPlaceholder').classList.add('hidden');
+        document.getElementById('pokemonDetails').classList.remove('hidden');
+
+        document.getElementById('resSpecies').innerText = species.replace(/_/g, ' ');
+        document.getElementById('resLevel').innerText = `Lv. ${level}`;
+        document.getElementById('resNature').innerText = nature || "Hardy";
+        document.getElementById('resAbility').innerText = (ability || "None").replace(/_/g, ' ');
+        document.getElementById('resItem').innerText = item ? item.replace(/_/g, ' ') : "None";
+        
+        const sTag = document.getElementById('resShiny');
+        shiny ? sTag.classList.remove('hidden') : sTag.classList.add('hidden');
+
+        // Moves - find all unique uppercase IDs that look like moves
+        const moves = [...decoded.matchAll(/[A-Z0-9_]{4,}/g)]
+            .map(m => m[0])
+            .filter(m => m !== species && m !== nature && m !== ability && m !== item)
+            .slice(0, 4);
+
+        const mBox = document.getElementById('resMoves');
+        mBox.innerHTML = '';
+        moves.forEach(move => {
+            const div = document.createElement('div');
+            div.className = "bg-white/5 border border-white/10 p-2 rounded-lg text-[10px] font-mono text-slate-300 uppercase italic";
+            div.innerText = move.replace(/_/g, ' ');
+            mBox.appendChild(div);
+        });
+
+        toast("Pokémon Unpacked!");
+        lucide.createIcons();
+    } catch (e) {
+        console.error("Extraction failed:", e);
+        toast("Invalid or Incompatible Data");
+    }
+}
+
 if(currentUser) {
-    // If logged in, we stay on the loading screen and let loginSuccess handle the transition
     window.addEventListener('load', () => {
         setTimeout(() => loginSuccess(currentUser), 400);
     });
 } else {
-    // If not logged in, hide loader and show landing as soon as possible
     window.addEventListener('load', () => {
         document.getElementById('loading-screen').classList.add('hidden');
         showPage('landing');
